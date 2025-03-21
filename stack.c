@@ -1,48 +1,50 @@
 #include "stack.h"
+#include <stdio.h>
+#include "boolean.h"
 
 void initStack(Stack *s){
-	createList(&s->list);
+    createList(&s->list);
 }
 
 void push(Stack *s, int newValue){
-	insertAtFirst(&s->list, newValue);
+    insertAtFirst(&s->list, newValue);
 }
 
 int pop(Stack *s){
-	if(is_Empty(s)){
-		printf("Stack Kosong");
-		return -1;
-	}
-	int newValue = s->list.first->info;
-	deleteAtFirst(&s->list);
-	return newValue;
+    if(is_Empty(s)){
+        printf("Stack Kosong\n");
+        return -1;
+    }
+    int newValue = s->list.first->info;
+    deleteAtFirst(&s->list);
+    return newValue;
 }
 
-int top(Stack s){
-	if(!is_Empty(s)){
-		return s->list.first->info;
-	}
-	printf("Stack KOsong");
-	return -1;
+int top(Stack *s){  
+    if (!is_Empty(s)){
+        return s->list.first->info;
+    }
+    printf("Stack Kosong\n");
+    return -1;
 }
 
-int is_Empty(Stack *s){
-	return isEmpty(&s->list);
+boolean is_Empty(Stack *s){ 
+    return (s->list.first == NULL);
 }
 
 int peek(Stack *s){
-	if(is_Empty(s)){
-		printf("Stack Kosong :)");
-		return -1;
-	}
-	return s->list.first->info;
+    if(is_Empty(s)){
+        printf("Stack Kosong :)\n");
+        return -1;
+    }
+    return s->list.first->info;
 }
 
 void deleteAll(Stack *s){
-	while(!is_Empty(s)){
-		deleteAtFirst(&s->list);
-	}
-	printf("Stack telah dikosongkan -_-");
+    while(!is_Empty(s)){
+        deleteAtFirst(&s->list);
+    }
+    printf("Stack telah dikosongkan -_-\n");
 }
 
 // Decimal To Biner
@@ -50,17 +52,23 @@ void decTobin(int decimal){
     Stack s;
     initStack(&s);
 
-    // Proses konversi: bagi dengan 2 dan simpan sisa bagi ke stack
+    if (decimal == 0) {
+        printf("0\n");
+        return;
+    }
+
+    // Proses konversi
     while (decimal > 0) {
-        push(&s, decimal % 2);
+        int remainder = decimal % 2;
+        push(&s, remainder);
         decimal /= 2;
     }
 
-    // Cetak hasil dengan mengambil nilai dari stack (pop)
+    // Cetak hasil konversi biner
     printf("Biner: ");
     while (!is_Empty(&s)) {
-        printf("%d", top(&s));
-        pop(&s);
+        printf("%d", pop(&s)); 
     }
     printf("\n");
 }
+
